@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input {
+            width: 50px;
+            text-align: center;
+            font-size: 1rem;
+            margin: 5px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pomodoro Timer</h1>
+
+    <div>
+        Work: <input type="number" id="workTime" value="25" min="1"> min 
+        Break: <input type="number" id="breakTime" value="5" min="1"> min
+    </div>
+
+    <div class="timer">
+        <span id="time-display">25:00</span>
+    </div>
+
+    <h2 id="status">Work Session</h2>
+
+    <div class="controls">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="pauseTimer()">Pause</button>
+        <button onclick="resetTimer()">Reset</button>
+    </div>
+
+    <script>
+        let workMinutes = 25;
+        let breakMinutes = 5;
+        let seconds = 0;
+        let isWorkSession = true;
+        let timerInterval;
+        let isPaused = false;
+
+        const timeDisplay = document.getElementById("time-display");
+        const statusDisplay = document.getElementById("status");
+        const workTimeInput = document.getElementById("workTime");
+        const breakTimeInput = document.getElementById("breakTime");
+
+        function formatTime(min, sec) {
+            return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+        }
+
+        function updateDisplay() {
+            timeDisplay.textContent = formatTime(workMinutes, seconds);
+            statusDisplay.textContent = isWorkSession ? "Work Session" : "Break Session";
+        }
+
+        function startTimer() {
+            if (!timerInterval) {
+                isPaused = false;
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+        }
+
+        function updateTimer() {
+            if (isPaused) return;
+
+            if (seconds === 0) {
+                if (isWorkSession && workMinutes === 0) {
+                    switchSession();
+                } else if (!isWorkSession && breakMinutes === 0) {
+                    switchSession();
+                } else {
+                    if (isWorkSession) workMinutes--;
+                    else breakMinutes--;
+                    seconds = 59;
+                }
+            } else {
+                seconds--;
+            }
+
+            timeDisplay.textContent = formatTime(isWorkSession ? workMinutes : breakMinutes, seconds);
+        }
+
+        function switchSession() {
+            isWorkSession = !isWorkSession;
+            workMinutes = parseInt(workTimeInput.value, 10);
+            breakMinutes = parseInt(breakTimeInput.value, 10);
+            seconds = 0;
+            updateDisplay();
+        }
+
+        function pauseTimer() {
+            isPaused = true;
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isWorkSession = true;
+            workMinutes = parseInt(workTimeInput.value, 10);
+            breakMinutes = parseInt(breakTimeInput.value, 10);
+            seconds = 0;
+            isPaused = false;
+            updateDisplay();
+        }
+
+        updateDisplay();
+    </script>
+
+</body>
+</html>
