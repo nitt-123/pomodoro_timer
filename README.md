@@ -1,6 +1,4 @@
-Here’s a well-structured **README.md** file for your Pomodoro Timer project:  
 
----
 
 ## 🕒 Pomodoro Timer  
 
