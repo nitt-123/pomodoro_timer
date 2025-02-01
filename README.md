@@ -33,10 +33,7 @@ A **simple, customizable Pomodoro Timer** built with **HTML, CSS, and JavaScript
 ## 📷 Screenshots  
 
 ### 🏁 Default Timer  
-![Pomodoro Timer](#) *(Add screenshot link here)*  
-
-### ⏳ Timer Running  
-![Running Timer](#) *(Add screenshot link here)*  
+![Uploading image.png…]()
 
 ---
 
